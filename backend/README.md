@@ -14,11 +14,11 @@
 ##Endpoint
 
 ###GET
-#### `http://localhost:3000/search?q={query}`
+#### `http://localhost:8080/search?q={query}`
 This endpoint is a GET call that returns a json for the query provided.
 
 *Sample Request*:
-`http://localhost:3000/search?q=GTAV`
+`http://localhost:8080/search?q=GTAV`
 
 <details>
   <summary>Sample Response</summary>
@@ -1262,11 +1262,11 @@ This endpoint is a GET call that returns a json for the query provided.
 ```
 </details>
 
-#### `http://localhost:3000/suggest?q={query}`
+#### `http://localhost:8080/suggest?q={query}`
 This endpoint is a GET call that returns a json for the query provided. This endpoint is an implementation of Bing's Auto suggest based on the query.
 
 *Sample Request*:
-`http://localhost:3000/suggest?q=sail`
+`http://localhost:8080/suggest?q=sail`
 
 <details>
   <summary>Sample Response</summary>
@@ -1328,6 +1328,54 @@ This endpoint is a GET call that returns a json for the query provided. This end
           "displayText": "sailing doodles",
           "query": "sailing doodles",
           "searchKind": "WebSearch"
+        }
+      ]
+    }
+  ]
+}
+```
+</details>
+
+#### `http://localhost:8080/spellcheck?q={query}`
+This endpoint is a GET call that returns a json for the query provided. This endpoint is an implementation of Bing's Auto suggest based on the query.
+
+*Sample Request*:
+`http://localhost:8080/spellcheck?q="incrct wrd"`
+
+<details>
+  <summary>Sample Response</summary>
+
+```json
+{
+  "_type": "SpellCheck",
+  "flaggedTokens": [
+    {
+      "offset": 1,
+      "token": "incrct",
+      "type": "UnknownToken",
+      "suggestions": [
+        {
+          "suggestion": "insect",
+          "score": 0.8768850774313898
+        },
+        {
+          "suggestion": "encrypt",
+          "score": 0.5450827595160521
+        }
+      ]
+    },
+    {
+      "offset": 8,
+      "token": "wrd",
+      "type": "UnknownToken",
+      "suggestions": [
+        {
+          "suggestion": "word",
+          "score": 0.8768850774313898
+        },
+        {
+          "suggestion": "world",
+          "score": 0.6550279730310102
         }
       ]
     }

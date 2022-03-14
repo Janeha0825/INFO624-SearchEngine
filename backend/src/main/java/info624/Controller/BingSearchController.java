@@ -27,4 +27,9 @@ public class BingSearchController {
     public ResponseEntity<String> suggest(@RequestParam("q") String query) throws Exception {
         return ok(bingService.suggest(query));
     }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/spellcheck")
+    public ResponseEntity<String> spellCheck(@RequestParam("q") String query) throws Exception {
+        return ok(bingService.spellcheck(query));
+    }
 }
