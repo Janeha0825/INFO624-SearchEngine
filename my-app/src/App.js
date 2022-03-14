@@ -17,9 +17,32 @@ function App() {
   function handleSubmit(e) {
     e.preventDefault();
     console.log("You clicked submit");
-    //set data here
+    var q = document.getElementById("q");
+    console.log(q.value);
     const result =  response.webPages.value;
     setData(result);
+  }
+
+  function sendObj() {
+    
+    var q = document.getElementById("q").value;
+    let hostingPath = "http://localhost:8080/"
+    const data = { q: q };
+    console.log(hostingPath + "search?q=" + q)
+    fetch(hostingPath + "search?q=" + q, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+      setData(data.webPages.value);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
   }
   
   return (
@@ -27,10 +50,10 @@ function App() {
       <header className="App-header"> Welcome
       </header>
       <div className="App-body">
-        <form className="form" onSubmit={handleSubmit}>
-          <input type="text" name="query" />
-          <input type="submit" value="Submit" />
-        </form>
+        {/* <form className="form"> */}
+          <input type="text" name="query" id="q"/>
+          <input type="submit" value="Submit" onClick={sendObj}/>
+        {/* </form> */}
         <div>
           <table border="2">
             <tbody>
