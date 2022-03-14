@@ -15,7 +15,8 @@
 
 ###GET
 #### `http://localhost:8080/search?q={query}`
-This endpoint is a GET call that returns a json for the query provided.
+This endpoint is a GET call that returns a json for the query provided. This endpoint is an implementation of Bing's query search based on the query provided in urlgit add .
+git co.
 
 *Sample Request*:
 `http://localhost:8080/search?q=GTAV`
@@ -1337,7 +1338,7 @@ This endpoint is a GET call that returns a json for the query provided. This end
 </details>
 
 #### `http://localhost:8080/spellcheck?q={query}`
-This endpoint is a GET call that returns a json for the query provided. This endpoint is an implementation of Bing's Auto suggest based on the query.
+This endpoint is a GET call that returns a json for the query provided. This endpoint is an implementation of Bing's Spell checker based on the query.
 
 *Sample Request*:
 `http://localhost:8080/spellcheck?q="incrct wrd"`
