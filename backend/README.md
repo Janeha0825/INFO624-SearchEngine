@@ -14,11 +14,11 @@
 ##Endpoint
 
 ###GET
-#### `http://localhost:3000//search?q={query}`
+#### `http://localhost:3000/search?q={query}`
 This endpoint is a GET call that returns a json for the query provided.
 
 *Sample Request*:
-`http://localhost:3000//search?q=GTAV`
+`http://localhost:3000/search?q=GTAV`
 
 <details>
   <summary>Sample Response</summary>
@@ -1258,6 +1258,80 @@ This endpoint is a GET call that returns a json for the query provided.
             ]
         }
     }
+}
+```
+</details>
+
+#### `http://localhost:3000/suggest?q={query}`
+This endpoint is a GET call that returns a json for the query provided. This endpoint is an implementation of Bing's Auto suggest based on the query.
+
+*Sample Request*:
+`http://localhost:3000/suggest?q=sail`
+
+<details>
+  <summary>Sample Response</summary>
+
+```json
+{
+  "_type": "Suggestions",
+  "queryContext": {
+    "originalQuery": "sail"
+  },
+  "suggestionGroups": [
+    {
+      "name": "Web",
+      "searchSuggestions": [
+        {
+          "url": "https://www.bing.com/search?q=sailor+moon&FORM=USBAPI",
+          "displayText": "sailor moon",
+          "query": "sailor moon",
+          "searchKind": "WebSearch"
+        },
+        {
+          "url": "https://www.bing.com/search?q=sailpoint&FORM=USBAPI",
+          "displayText": "sailpoint",
+          "query": "sailpoint",
+          "searchKind": "WebSearch"
+        },
+        {
+          "url": "https://www.bing.com/search?q=sailrite&FORM=USBAPI",
+          "displayText": "sailrite",
+          "query": "sailrite",
+          "searchKind": "WebSearch"
+        },
+        {
+          "url": "https://www.bing.com/search?q=sailboats+for+sale&FORM=USBAPI",
+          "displayText": "sailboats for sale",
+          "query": "sailboats for sale",
+          "searchKind": "WebSearch"
+        },
+        {
+          "url": "https://www.bing.com/search?q=sailor&FORM=USBAPI",
+          "displayText": "sailor",
+          "query": "sailor",
+          "searchKind": "WebSearch"
+        },
+        {
+          "url": "https://www.bing.com/search?q=sailor+brinkley+cook&FORM=USBAPI",
+          "displayText": "sailor brinkley cook",
+          "query": "sailor brinkley cook",
+          "searchKind": "WebSearch"
+        },
+        {
+          "url": "https://www.bing.com/search?q=sailfish&FORM=USBAPI",
+          "displayText": "sailfish",
+          "query": "sailfish",
+          "searchKind": "WebSearch"
+        },
+        {
+          "url": "https://www.bing.com/search?q=sailing+doodles&FORM=USBAPI",
+          "displayText": "sailing doodles",
+          "query": "sailing doodles",
+          "searchKind": "WebSearch"
+        }
+      ]
+    }
+  ]
 }
 ```
 </details>
