@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Scanner;
@@ -19,10 +21,11 @@ public class BingService {
      * dashboard.
      */
     static String host = "https://api.bing.microsoft.com";
-    static String path = "/v7.0/search";
+    static String searchPath = "/v7.0/search";
+    static String suggestPath = "/v7.0/Suggestions";
     public static String search (String searchQuery) throws Exception {
         // Construct the URL.
-        URL url = new URL(host + path + "?q=" +  URLEncoder.encode(searchQuery, "UTF-8"));
+        URL url = new URL(host + searchPath + "?q=" +  URLEncoder.encode(searchQuery, "UTF-8"));
 
         // Open the connection.
         HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
@@ -43,6 +46,22 @@ public class BingService {
 //                results.relevantHeaders.put(header, headers.get(header).get(0));
 //            }
 //        }
+        stream.close();
+        return response;
+    }
+
+    public String suggest(String suggestQuery) throws Exception {
+        String encoded_query = URLEncoder.encode (suggestQuery, "UTF-8");
+        String params = "?mkt=en-US" + "&q=" + encoded_query;
+        URL url = new URL (host + suggestPath + params);
+        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Ocp-Apim-Subscription-Key", subscriptionKey);
+        connection.setDoOutput(true);
+
+        // Receive the JSON response body.
+        InputStream stream = connection.getInputStream();
+        String response = new Scanner(stream).useDelimiter("\\A").next();
         stream.close();
         return response;
     }
