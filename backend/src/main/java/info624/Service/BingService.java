@@ -1,9 +1,5 @@
 package info624.Service;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import org.springframework.stereotype.Service;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -17,6 +13,13 @@ public class BingService {
     // Enter a valid subscription key.
     static String subscriptionKey = "d006441623e84b52b6508c6f6ee50af4";
 
+    /**
+     * CITATION:
+     * We used Bing's api so we used their documentation to create our service layer:
+     *      https://docs.microsoft.com/en-us/azure/cognitive-services/bing-web-search/
+     * Some of their documentation code snippet is old and had some extra stuff in it which we did not need as spring took care of some of those things for us. So we scrapped all those thing.
+     */
+
     /*
      * If you encounter unexpected authorization errors, double-check these values
      * against the endpoint for your Bing Web search instance in your Azure
@@ -27,28 +30,11 @@ public class BingService {
     static String suggestPath = "/v7.0/Suggestions";
     static String spellCheckPath = "/v7.0/spellcheck";
     public static String search (String searchQuery) throws Exception {
-        // Construct the URL.
         URL url = new URL(host + searchPath + "?q=" +  URLEncoder.encode(searchQuery, "UTF-8"));
-
-        // Open the connection.
         HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
         connection.setRequestProperty("Ocp-Apim-Subscription-Key", subscriptionKey);
-
-        // Receive the JSON response body.
         InputStream stream = connection.getInputStream();
         String response = new Scanner(stream).useDelimiter("\\A").next();
-//
-        // Construct the result object.
-//        SearchResults results = new SearchResults(new HashMap<String, String>(), response);
-
-        // Extract Bing-related HTTP headers.
-//        Map<String, List<String>> headers = connection.getHeaderFields();
-//        for (String header : headers.keySet()) {
-//            if (header == null) continue;      // may have null key
-//            if (header.startsWith("BingAPIs-") || header.startsWith("X-MSEdge-")){
-//                results.relevantHeaders.put(header, headers.get(header).get(0));
-//            }
-//        }
         stream.close();
         return response;
     }
@@ -61,7 +47,6 @@ public class BingService {
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Ocp-Apim-Subscription-Key", subscriptionKey);
         connection.setDoOutput(true);
-
         InputStream stream = connection.getInputStream();
         String response = new Scanner(stream).useDelimiter("\\A").next();
         stream.close();
@@ -76,12 +61,10 @@ public class BingService {
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         connection.setRequestProperty("Ocp-Apim-Subscription-Key", subscriptionKey);
         connection.setDoOutput(true);
-
         DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
         wr.writeBytes("text=" + spellCheckQuery);
         wr.flush();
         wr.close();
-
         BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String line;
         String response = "";
@@ -90,12 +73,5 @@ public class BingService {
         }
         in.close();
         return response;
-    }
-
-    public static String prettify(String json_text) {
-        JsonParser parser = new JsonParser();
-        JsonElement json = parser.parse(json_text);
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(json);
     }
 }
