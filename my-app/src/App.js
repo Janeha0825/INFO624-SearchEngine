@@ -1,6 +1,4 @@
-import logo from "./logo.svg";
 import "./App.css";
-import response from "./sampleResponse";
 import React, { useState, useEffect } from "react";
 
 
@@ -9,6 +7,8 @@ function App() {
   const [data, setData] = useState([]);
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
+  const [spellCheck, setSpellCheck] = useState([]);
+
   const hostingPath = "http://localhost:8080";
   const fetchOptions = {
     method: 'GET',
@@ -18,27 +18,46 @@ function App() {
   }
 
   function onQueryChange(q) {
-    setQuery(q);
-    fetchSuggestions();
+    setQuery(q)
+   
   }
+  useEffect(() => {
+    fetchSpellCheck();
+    fetchSuggestions();
+  }, [query])
+
 
   function fetchSuggestions() {
     fetch(`${hostingPath}/suggest?q=${query}`, fetchOptions)
       .then(response => response.json())
       .then(response => {
-        console.log(response)
-        setSuggestions(response.suggestionGroups[0].searchSuggestions);
+        setSuggestions(response?.suggestionGroups && response?.suggestionGroups.length > 0 ? response?.suggestionGroups[0]?.searchSuggestions : []);
+      });
+  }
+
+  function fetchSpellCheck() {
+    fetch(`${hostingPath}/spellcheck?q=${query}`, fetchOptions)
+      .then(response => response.json())
+      .then(response => {
+        setSpellCheck(response?.flaggedTokens?.suggestions ? response?.flaggedTokens?.suggestions : [] )
       });
   }
 
   function onSuggestionClick(q) {
-    console.log("q", q);
     setQuery(q);
     sendObj(q);
   }
 
+  function onSpellCheckClick(q) {
+    setQuery(q);
+    sendObj(q);
+
+  }
+
   function sendObj(q) {
     setSuggestions([]);
+    setSpellCheck([]);
+
     fetch(hostingPath + "/search?q=" + q, {
       method: 'GET',
       headers: {
@@ -47,7 +66,6 @@ function App() {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Success:', data);
         setData(data.webPages.value);
       })
       .catch((error) => {
@@ -57,12 +75,21 @@ function App() {
 
   const suggestionsComponent = () => {
     return (
-      suggestions && suggestions.map(suggestion => {
+      query !== "" && suggestions && suggestions.map(suggestion => {
         return (
           <p key={suggestion.displayText} onClick={() => onSuggestionClick(suggestion.displayText)}>{suggestion.displayText}</p>
         )
       })
     )
+}
+const spellCheckComponent = () => {
+  return (
+    query !== "" && spellCheck && spellCheck.map(item => {
+      return (
+        <p key={item.suggestion} onClick={() => onSpellCheckClick(item.suggestion)}>{item.suggestion}</p>
+      )
+    })
+  )
 }
 
 return (
@@ -70,18 +97,15 @@ return (
     <header className="App-header"> Welcome
     </header>
     <div className="App-body">
-      {/* <form className="form"> */}
       <input type="text" onChange={e => onQueryChange(e.target.value)} name="query" value={query} />
 
-      {/* Suggestions */}
-      {suggestionsComponent()}
-
       <input type="submit" value="Submit" onClick={() => sendObj(query)} />
-      {/* </form> */}
+      {spellCheckComponent()}
+      {suggestionsComponent()}
       <div>
         <table border="2">
           <tbody>
-            {data != "" ? data.map((item, i) => (
+            {query !== "" && data !== "" ? data.map((item, i) => (
               <tr key={i}>
                 <div>{item.name}</div>
                 <div>{item.snippet}</div>
